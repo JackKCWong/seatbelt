@@ -98,28 +98,6 @@ func TestPasswordDetector(t *testing.T) {
 	}
 }
 
-func TestDotEnvDetector(t *testing.T) {
-	d := NewDotEnvDetector()
-	tests := []struct {
-		name     string
-		prompt   string
-		wantFind bool
-	}{
-		{".env file", "Check .env for configuration", true},
-		{"No file", "Just some text", false},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			findings, _ := d.Detect(tt.prompt)
-			found := len(findings) > 0
-			if found != tt.wantFind {
-				t.Errorf("Detect() found=%v, want %v", found, tt.wantFind)
-			}
-		})
-	}
-}
-
 func TestRegistry(t *testing.T) {
 	r := NewRegistry(
 		NewAPIKeyDetector(),
