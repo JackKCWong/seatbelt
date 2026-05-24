@@ -35,5 +35,4 @@ var scanSecretsCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(scanSecretsCmd)
 	scanSecretsCmd.Flags().StringVar(&action, "action", "block", "action to take when secrets are found (block)")
-	scanSecretsCmd.MarkFlagRequired("action")
 }

@@ -4,7 +4,7 @@
 ## Hook input and output
 Hooks communicate with VS Code through stdin (input) and stdout (output) using JSON.
 
-Common input fields
+* Common input fields
 Every hook receives a JSON object via stdin with these common fields:
 
 ```json
@@ -17,7 +17,7 @@ Every hook receives a JSON object via stdin with these common fields:
 }
 ```
 
-Common output format
+* Common output format
 Hooks can return JSON via stdout to influence agent behavior. All hooks support these output fields:
 
 ```json
@@ -27,6 +27,14 @@ Hooks can return JSON via stdout to influence agent behavior. All hooks support 
   "systemMessage": "Unit tests failed"
 }
 ```
+
+* Exit codes
+The hook's exit code determines how VS Code handles the result:
+
+Exit Code	Behavior
+0	Success: parse stdout as JSON
+2	Blocking error: stop processing and show error to model
+Other	Non-blocking warning: show warning to user, continue processing
 
 ## UserPromptSubmit
 The UserPromptSubmit hook fires when the user submits a prompt.
