@@ -22,7 +22,7 @@ type HookInput struct {
 }
 
 func readIgnorePatterns() ([]string, error) {
-	data, err := os.ReadFile(".vscodeignore")
+	data, err := os.ReadFile(".secretsignore")
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil, nil
@@ -38,6 +38,44 @@ func readIgnorePatterns() ([]string, error) {
 		}
 		patterns = append(patterns, line)
 	}
+	return patterns, nil
+}
+
+func defaultSecretPatterns() []string {
+	return []string{
+		".env",
+		".env.local",
+		".env.*",
+		".npmrc",
+		".yarnrc",
+		".pypirc",
+		"pip.conf",
+		"settings.xml",
+		".gitcredentials",
+		".netrc",
+		"credentials",
+		".aws/credentials",
+		".aws/config",
+		"docker/config.json",
+		".docker/config.json",
+		"secrets.yaml",
+		"secrets.yml",
+		"secrets.json",
+		".vault-token",
+		".燃料箱.toml",
+		".sops.yaml",
+		".sops.yml",
+		".sops.json",
+	}
+}
+
+func getAllPatterns() ([]string, error) {
+	patterns := defaultSecretPatterns()
+	userPatterns, err := readIgnorePatterns()
+	if err != nil {
+		return nil, err
+	}
+	patterns = append(patterns, userPatterns...)
 	return patterns, nil
 }
 
@@ -68,7 +106,7 @@ func BlockSensitiveFilesCmd() *cobra.Command {
 		Use:   "block-sensitive-files",
 		Short: "Block sensitive files",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			patterns, err := readIgnorePatterns()
+			patterns, err := getAllPatterns()
 			if err != nil {
 				return err
 			}
