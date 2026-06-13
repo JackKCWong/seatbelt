@@ -7,6 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/seatbelt/cmd"
 )
 
 var cfgFile string
@@ -29,6 +31,8 @@ func Execute() error {
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default $HOME/.seatbelt.yaml)")
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
+
+	rootCmd.AddCommand(cmd.BlockSensitiveFilesCmd())
 }
 
 func initConfig() error {
