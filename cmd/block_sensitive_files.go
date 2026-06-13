@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/bmatcuk/doublestar"
 	"github.com/spf13/cobra"
 )
 
@@ -43,29 +44,28 @@ func readIgnorePatterns() ([]string, error) {
 
 func defaultSecretPatterns() []string {
 	return []string{
-		".env",
-		".env.local",
-		".env.*",
-		".npmrc",
-		".yarnrc",
-		".pypirc",
-		"pip.conf",
-		"settings.xml",
-		".gitcredentials",
-		".netrc",
-		"credentials",
-		".aws/credentials",
-		".aws/config",
-		"docker/config.json",
-		".docker/config.json",
-		"secrets.yaml",
-		"secrets.yml",
-		"secrets.json",
-		".vault-token",
-		".燃料箱.toml",
-		".sops.yaml",
-		".sops.yml",
-		".sops.json",
+		"**/.env",
+		"**/.env.local",
+		"**/.env.*",
+		"**/.npmrc",
+		"**/.yarnrc",
+		"**/.pypirc",
+		"**/pip.conf",
+		"**/.m2/settings.xml",
+		"**/.gitcredentials",
+		"**/.netrc",
+		"**/credentials",
+		"**/.aws/credentials",
+		"**/.aws/config",
+		"**/.docker/config.json",
+		"**/secrets.yaml",
+		"**/secrets.yml",
+		"**/secrets.json",
+		"**/.vault-token",
+		"**/.sops.yaml",
+		"**/.sops.yml",
+		"**/.sops.json",
+		"**/.燃料箱.toml",
 	}
 }
 
@@ -83,19 +83,12 @@ func matchesPattern(filePath string, patterns []string) (bool, string) {
 	filePath = filepath.ToSlash(filePath)
 	for _, pattern := range patterns {
 		pattern = filepath.ToSlash(pattern)
-		if ok, _ := filepath.Match(pattern, filePath); ok {
+		if ok, err := doublestar.Match(pattern, filePath); ok && err == nil {
 			return true, pattern
 		}
-		dir := filepath.Dir(filePath)
 		base := filepath.Base(filePath)
-		if ok, _ := filepath.Match(pattern, base); ok {
+		if ok, err := doublestar.Match(pattern, base); ok && err == nil {
 			return true, pattern
-		}
-		if strings.HasSuffix(pattern, "/") {
-			dirPattern := strings.TrimSuffix(pattern, "/")
-			if ok, _ := filepath.Match(dirPattern, dir); ok {
-				return true, pattern
-			}
 		}
 	}
 	return false, ""
