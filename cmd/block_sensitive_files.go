@@ -142,10 +142,7 @@ func BlockSensitiveFilesCmd() *cobra.Command {
 								"hookEventName":            "PreToolUse",
 								"permissionDecision":       "deny",
 								"permissionDecisionReason": "sensitive file read blocked by policy",
-								"additionalContext": map[string]string{
-									"file":   readFileInput.FilePath,
-									"pattern": pattern,
-								},
+							"additionalContext": "Access to " + readFileInput.FilePath + " was blocked by sensitive file policy (matched pattern: " + pattern + ").",
 							},
 						}
 						enc := json.NewEncoder(os.Stdout)
