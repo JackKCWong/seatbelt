@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/seatbelt/pkg/scanner"
+	"github.com/JackKCWong/seatbelt/pkg/scanner"
 )
 
 func TestProcessInput(t *testing.T) {
@@ -21,20 +21,20 @@ func TestProcessInput(t *testing.T) {
 	}{
 		{
 			name:       "No secrets",
-			input:     HookInput{Prompt: "Just a normal prompt"},
-			wantCont:  true,
+			input:      HookInput{Prompt: "Just a normal prompt"},
+			wantCont:   true,
 			wantReason: "",
 		},
 		{
 			name:       "API key detected",
-			input:     HookInput{Prompt: "Use AIzaSyABC123xyzDEFGHIJKLMNOPQRSTUV for API"},
-			wantCont:  false,
+			input:      HookInput{Prompt: "Use AIzaSyABC123xyzDEFGHIJKLMNOPQRSTUV for API"},
+			wantCont:   false,
 			wantReason: "Security policy violation",
 		},
 		{
 			name:       "Password detected",
-			input:     HookInput{Prompt: "password=supersecret"},
-			wantCont:  false,
+			input:      HookInput{Prompt: "password=supersecret"},
+			wantCont:   false,
 			wantReason: "Security policy violation",
 		},
 	}

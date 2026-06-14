@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/seatbelt/pkg/hook"
-	"github.com/seatbelt/pkg/scanner"
+	"github.com/JackKCWong/seatbelt/pkg/hook"
+	"github.com/JackKCWong/seatbelt/pkg/scanner"
 	"github.com/spf13/cobra"
 )
 
@@ -32,7 +32,7 @@ var scanSecretsCmd = &cobra.Command{
 	},
 }
 
-// disable this command for now 
+// disable this command for now
 // func init() {
 // 	rootCmd.AddCommand(scanSecretsCmd)
 // 	scanSecretsCmd.Flags().StringVar(&action, "action", "block", "action to take when secrets are found (block)")

@@ -1,4 +1,4 @@
-module github.com/seatbelt
+module github.com/JackKCWong/seatbelt
 
 go 1.21
 
