@@ -23,7 +23,7 @@ type HookInput struct {
 }
 
 func readIgnorePatterns() ([]string, error) {
-	data, err := os.ReadFile(".secretsignore")
+	data, err := os.ReadFile(".copilotdeny")
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil, nil
