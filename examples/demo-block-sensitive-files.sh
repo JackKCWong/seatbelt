@@ -3,32 +3,34 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+run_test() {
+    local label="$1"
+    local input="$2"
+    echo ""
+    echo "=== $label ==="
+    echo "Input: $input"
+    echo "$input" | ./seatbelt.exe block-sensitive-files
+}
+
 echo "=== Build ==="
 go build -o seatbelt.exe .
 
-echo ""
-echo "=== Test: Normal file (should ALLOW) ==="
-echo '{"tool_name":"read_file","tool_input":{"filePath":"src/normal.go","startLine":1,"endLine":200}}' | ./seatbelt.exe block-sensitive-files
+run_test "Test: Normal file (should ALLOW)" \
+    '{"tool_name":"read_file","tool_input":{"filePath":"src/normal.go"}}'
 
-echo ""
-echo "=== Test: .env file (should DENY) ==="
-echo '{"tool_name":"read_file","tool_input":{"filePath":".env","startLine":1,"endLine":200}}' | ./seatbelt.exe block-sensitive-files
+run_test "Test: .env file (should DENY)" \
+    '{"tool_name":"read_file","tool_input":{"filePath":".env"}}'
 
-echo ""
-echo "=== Test: Nested .env file (should DENY) ==="
-echo '{"tool_name":"read_file","tool_input":{"filePath":"config/prod/.env","startLine":1,"endLine":200}}' | ./seatbelt.exe block-sensitive-files
+run_test "Test: Nested .env file (should DENY)" \
+    '{"tool_name":"read_file","tool_input":{"filePath":"config/prod/.env"}}'
 
-echo ""
-echo "=== Test: credentials file (should DENY) ==="
-echo '{"tool_name":"read_file","tool_input":{"filePath":"credentials","startLine":1,"endLine":200}}' | ./seatbelt.exe block-sensitive-files
+run_test "Test: credentials file (should DENY)" \
+    '{"tool_name":"read_file","tool_input":{"filePath":"credentials"}}'
 
-echo ""
-echo "=== Test: ~/.npmrc style path (should DENY) ==="
-echo '{"tool_name":"read_file","tool_input":{"filePath":"/home/user/.npmrc","startLine":1,"endLine":200}}' | ./seatbelt.exe block-sensitive-files
+run_test "Test: ~/.npmrc style path (should DENY)" \
+    '{"tool_name":"read_file","tool_input":{"filePath":"/home/user/.npmrc"}}'
 
-echo ""
-echo "=== Test: Empty stdin (should ALLOW) ==="
-echo "" | ./seatbelt.exe block-sensitive-files
+run_test "Test: Empty stdin (should ALLOW)" ''
 
 echo ""
 echo "=== Cleanup ==="
